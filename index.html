@@ -16,6 +16,7 @@
       var analog3 = 0;
 	  var analog4 = 0;
 	  var analog5 = 0;
+	  var analog10 = 0;
 	  var data_val = 0;
       var data_val2 = 0;
       var digital1 = 0;
@@ -81,34 +82,60 @@ s[2]);e.highlights.push(x)}break;case "animation":d[1]&&(e.animation||(e.animati
 k.getAttribute("data-onready")&&(e.onready=function(){eval(this.config.renderTo.getAttribute("data-onready"))});e.draw()}});window.Gauge=Gauge;
 
 
-function ajax_post(){
-    // Create our XMLHttpRequest object
-    var hr = new XMLHttpRequest();
-    // Create some variables we need to send to our PHP file
-    var url = "/php/review_data1.php";
-				//var fn = document.getElementById("first_name").value;
+function ajax_post()
+{
+                //var fn = document.getElementById("first_name").value;
 				//var ln = document.getElementById("last_name").value;
 				//var vars = "firstname="+fn+"&lastname="+ln;
-    hr.open("POST", url, true);
-    // Set content type header information for sending url encoded variables in the request
-    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // Access the onreadystatechange event for the XMLHttpRequest object
-    hr.onreadystatechange = function() {
-	    if(hr.readyState == 4 && hr.status == 200) {
-		    var return_data = hr.responseText;
-			//alert("GET data : " + hr.responseText);
-			
-			document.getElementById("myVal").innerHTML = return_data;
-			//digital0 = this.responseXML.getElementsByTagName('analog')[6].childNodes[0].nodeValue;
-			//document.getElementById("digital0").innerHTML = digital0;
-			           
-	    }
-    }
-    // Send the data to PHP now... and wait for response to update the status div
-    hr.send(); // hr.send(vars);  Actually execute the request
-	//alert("SEND vars : " + vars);
+				
+   var xmlhttp = new XMLHttpRequest();
+             //hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.onreadystatechange = function()
+            {
+                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {								
+								 //alert("GET txt: " + xmlhttp.responseText);
+								var arr = JSON.parse(xmlhttp.responseText);
+								analog1 = arr[0].analog1 / 10;
+								analog2 = arr[0].analog2 / 10;
+								analog3 = arr[0].analog3 / 10;
+								analog4 = arr[0].analog4 / 10;
+								analog5 = arr[0].analog5 / 10;
+								analog6 = arr[0].analog6 / 10;
+								digital0 = arr[1].digital0;
+								digital1 = arr[1].digital1;
+								digital2 = arr[1].digital2;
+								digital3 = arr[1].digital3;
+								digital4 = arr[1].digital4;								
+                                pwm0= arr[2].pwm0;
+                                //pwm1= arr[2].pwm1;
+								pwm2= arr[2].pwm2;	
+
+                            document.getElementById("digital0").innerHTML = digital0;
+							document.getElementById("digital1").innerHTML = digital1;
+							document.getElementById("digital2").innerHTML = digital2;
+							document.getElementById("digital3").innerHTML = digital3;
+							document.getElementById("digital4").innerHTML = digital4;
+							document.getElementById("pwm0val").innerHTML = pwm0;
+							//document.getElementById("pwm1val").innerHTML = pwm1;
+							document.getElementById("pwm2val").innerHTML = pwm2;								
+								//alert(" JSON analog1= " + arr[0].analog1);
+								//alert(" JSON digital0= " + arr[1].digital0);
+								//alert(" JSON pwm0= " + arr[2].pwm0);
+document.getElementById("myVal").innerHTML = analog1 + ":" + analog2 + ":" + analog3 + ":" + analog3 + ":" + analog4 + ":" + analog5 + ":" + analog6 + "d" + digital0 + ":" + digital1 + ":" + digital2 + ":" + digital3 + ":" + digital4 + "p" + pwm0 + ":" + pwm1 + ":" + pwm2;
+							}                                 
+            }
+    var url = "/php/review_data1.php";
+	xmlhttp.open("GET", url, true);    
+    xmlhttp.send(); // hr.send(vars);  Actually execute the request	
     document.getElementById("myVal").innerHTML = "processing MySQL DB...";
-	
+			document.getElementById("digital0").innerHTML = "updating...";
+			document.getElementById("digital1").innerHTML = "updating...";
+			document.getElementById("digital2").innerHTML = "updating...";
+			document.getElementById("digital3").innerHTML = "updating...";
+			document.getElementById("digital4").innerHTML = "updating...";
+			document.getElementById("pwm0val").innerHTML = "updating...";
+			//document.getElementById("pwm1val").innerHTML = "updating...";
+			document.getElementById("pwm2val").innerHTML = "updating...";
 }
 
 function updateSlider(pwmChannel, pwmvalue) 
@@ -126,6 +153,7 @@ function updateSlider(pwmChannel, pwmvalue)
                     }
                 }
             }
+		
 			request.open("GET", myIPaddress + "ajax_inputs&" + pwmChannel + "=" + pwmvalue + nocache, true);
 			//alert("SEND: " + myIPaddress + "ajax_inputs&" + pwmChannel + "=" + pwmvalue + nocache );
             request.send(null);			 
@@ -142,12 +170,14 @@ function DoCommand(targetElement, command) {
                 if (this.readyState == 4) {
                     if (this.status == 200) {
                         if (this.responseXML != null) {
-						    alert("GET data : " + request.responseText);
+						    //alert("GET data : " + request.responseText);
+							//document.write("<tr> GGGGGG <td>");
         
                         }
                     }
                 }
             }
+	
     request.open("GET", myIPaddress + "ajax_inputs&" + targetElement + "=" + command + nocache, true);
 	//alert("SEND DoCommand : " + myIPaddress + "ajax_inputs&" + targetElement+ "=" + command + nocache);
     request.send();
@@ -190,10 +220,11 @@ function GetArduinoInputs()
 							//alert("GET values: " + "data_val=" + data_val + " data_val2=" + data_val2);
                             data_val  = ((data_val * 5.0 / 1024.0) - 0.5) / 0.01;
                             data_val4 = ((data_val2 * 5.0 / 1024.0) - 0.5) / 0.01;
-							analog2 = Math.random() * 1024;
-							analog3 = Math.random() * 1024;
-							analog4 = Math.random() * 150;
-							ajax_post();
+							//analog2 = Math.random() * 1024;
+							//analog3 = Math.random() * 1024;
+							//analog4 = Math.random() * 150;
+							 analog0 /= 10; analog1 /= 10; analog2 /= 10;analog3 /= 10;analog4 /= 10; analog5 /= 10;
+							//ajax_post();
                         }
                     }
                 }
@@ -206,7 +237,14 @@ function GetArduinoInputs()
 			//request.setRequestHeader("Origin", "http://10.0.0.16");
 			//alert("SEND: " + myIPaddress + "ajax_inputs" + nocache );
             request.send(null);
-			
+			document.getElementById("digital0").innerHTML = "updating...";
+			document.getElementById("digital1").innerHTML = "updating...";
+			document.getElementById("digital2").innerHTML = "updating...";
+			document.getElementById("digital3").innerHTML = "updating...";
+			document.getElementById("digital4").innerHTML = "updating...";
+			document.getElementById("pwm0val").innerHTML = "updating...";
+			//document.getElementById("pwm1val").innerHTML = "updating...";
+			document.getElementById("pwm2val").innerHTML = "updating...";
 			setTimeout('GetArduinoInputs()', 5000);
 			//setTimeout('ajax_post();', 5000);
             
@@ -241,16 +279,20 @@ function GetArduinoInputs()
 <div class="divBorder"><h2>Arduino Fast Track - Lesson 4</h2><h2>Control over Ethernet using the Wiznet and ENC26 modules</h2></div>
     <br />
         <div class="divBorder"><table width="800">
-        <tr><th>A0</th><th>A1</th><th>A2</th><th>A3</th></tr>
+        <tr><th>A0</th><th>A1</th><th>A2</th></tr>
         <tr>
             <td><canvas id="Canvas0"></canvas></td>
             <td><canvas id="Canvas1"></canvas></td>
 			 <td><canvas id="Canvas2"></canvas></td>
-            <td><canvas id="an_gauge_4" data-title="Outside" data-units="Temp4. &deg;C" width="200" height="200" data-major-ticks="-40 -30 -20 -10 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150" data-type="canv-gauge" data-min-value="-40" data-max-value="150" data-highlights="-40 0 #4D89F2, 0 10 #25B8D9, 10 30 #0BB950, 30 40 #cc5, 40 150 #f33" data-onready="setInterval( function() { Gauge.Collection.get('an_gauge_4').setValue(analog4);}, 200);"></canvas></td>
+            
                 
 	   </tr>
+	   <tr><th>A3</th><th>A4</th><th>A5</th></tr>
 	   <tr>
-	         <td><canvas id="Canvas3"></canvas></td>
+	         <td><canvas id="an_gauge_4" data-title="Analog 4 title" data-units="Temp4. &deg;C" width="200" height="200" data-major-ticks="-40 -30 -20 -10 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150" data-type="canv-gauge" data-min-value="-40" data-max-value="150" data-highlights="-40 0 #4D89F2, 0 10 #25B8D9, 10 30 #0BB950, 30 40 #cc5, 40 150 #f33" data-onready="setInterval( function() { Gauge.Collection.get('an_gauge_4').setValue(analog4);}, 200);"></canvas></td>
+	         <td><canvas id="an_gauge_5" data-title="Analog 5 title" data-units="Temp5. &deg;C" width="200" height="200" data-major-ticks="-40 -30 -20 -10 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150" data-type="canv-gauge" data-min-value="-40" data-max-value="150" data-highlights="-40 0 #4D89F2, 0 10 #25B8D9, 10 30 #0BB950, 30 40 #cc5, 40 150 #f33" data-onready="setInterval( function() { Gauge.Collection.get('an_gauge_5').setValue(analog5);}, 200);"></canvas></td>
+
+			 <td><canvas id="Canvas3"></canvas></td>
 	   </tr>
     </table></div>
     <br />
@@ -293,13 +335,14 @@ function GetArduinoInputs()
         var gauge0 = new Gauge({
             renderTo: 'Canvas0',
             width: 200, height: 200,
-            maxValue: 1023,
-            valueFormat: { int: 4, dec: 0 },
+            maxValue: 100, //1024
+            valueFormat: { float: 4, dec: 2 }, //  { int: 4, dec: 0 }
             glow: true,
-            units: 'Count', title: 'Analog 0',
-            majorTicks: ['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
+            units: 'Procent %', title: 'Analog 0 title',
+            majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'],
             strokeTicks: true,
-            highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+            //highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+			highlights: [{from: 00,to: 25,color: 'PaleGreen'}, {from: 25,to: 76,color: 'Khaki'}, {from: 76,to: 100,color: 'LightSalmon'}],
             animation: {delay: 10, duration: 300,fn: 'bounce' }
         });
         gauge0.onready = function () { setInterval(function () { gauge0.setValue(analog0); }, 200); };
@@ -308,13 +351,13 @@ function GetArduinoInputs()
         var gauge1 = new Gauge({
             renderTo: 'Canvas1',
             width: 200, height: 200,
-            maxValue: 1023,
-            units: 'Count', title: 'Analog 1',
-            valueFormat: { int: 4, dec: 0 },
+            maxValue: 100, //1024
+            units: 'Procent %', title: 'Analog 1 title',
+            valueFormat: { float: 4, dec: 2}, //  { int: 4, dec: 0 }
             glow: true,
-            majorTicks: ['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
+            majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'], //['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
             strokeTicks: true,
-            highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+            highlights: [{from: 00,to: 25,color: 'PaleGreen'}, {from: 25,to: 76,color: 'Khaki'}, {from: 76,to: 100,color: 'LightSalmon'}],
             animation: {delay: 10,duration: 300,fn: 'bounce'}});
         gauge1.onready = function () {setInterval(function () {gauge1.setValue(analog1);}, 200);};
         gauge1.draw();
@@ -322,13 +365,13 @@ function GetArduinoInputs()
         var gauge2 = new Gauge({
             renderTo: 'Canvas2',
             width: 200,height: 200,
-            maxValue: 1023,
-            units: 'Count',title: 'Analog 2',
-            valueFormat: { int: 4, dec: 0 },
+            maxValue: 100, //1024
+            units: 'Procent %',title: 'Analog 2 title',
+            valueFormat: { float: 4, dec: 2 }, //  { int: 4, dec: 0 }
             glow: true,
-            majorTicks: ['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
+            majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'], //['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
             strokeTicks: true,
-            highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+            highlights: [{from: 00,to: 25,color: 'PaleGreen'}, {from: 25,to: 76,color: 'Khaki'}, {from: 76,to: 100,color: 'LightSalmon'}],
             animation: {delay: 10,duration: 300,fn: 'bounce'}});
         gauge2.onready = function () {setInterval(function () {gauge2.setValue(analog2);}, 200);};
         gauge2.draw();
@@ -336,11 +379,11 @@ function GetArduinoInputs()
         var gauge3 = new Gauge({
             renderTo: 'Canvas3',
             width: 200, height: 200,
-            maxValue: 1024,
-            units: 'Volts', title: 'Analog 4',
-            valueFormat: { int: 4, dec: 0 },
+            maxValue: 100, //1024
+            units: 'Procent %', title: 'Analog 3 title',
+            valueFormat: { float: 4, dec: 2 }, //  { int: 4, dec: 0 }
             glow: true,
-            majorTicks: ['0', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0'],
+            majorTicks: ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100'], //['0', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0'],
             highlights: false,
             glow: false,
             colors: {needle:{ start:'lightgreen',end:'navy'},plate:'lightyellow',title:'green',units:'lightgreen',majorTicks:'darkgreen',minorTicks:'lightgreen',numbers:'darkgreen'},
@@ -349,7 +392,7 @@ function GetArduinoInputs()
         gauge3.draw();
 
 </script>
-    <br />Page created by Alecu <a href="https://github.com/gitalecu"> https://github.com/gitalecu </a>
+   
    
 </body></html>
 
@@ -396,14 +439,13 @@ function AJAXSubmit (oFormElement) {
 </head>
 <body>
 
-<h1>Sending forms with FormData</h1>
+<h3>Sending forms with FormData</h3>
 
-<h2>Using the GET method to Arduino</h2>
 <div class="divBorder"><table width="800"><tr>       
 <form action="http://10.0.0.19/" method="get" onsubmit="AJAXSubmit(this); return false;">
    
 	             <input type="hidden" name="ajax_inputs" value="1"/> 
-     <td> pwm0: <input type="number" name="pwm0" min="0" max="32000" onChange="DoCommand('pwm0', this.value)" value="100"/></td>
+     <td> pwm0: <input type="number" name="pwm0" min="0" max="32000"  onChange="DoCommand('pwm0', this.value)" value="100"/></td>
 	 <td> pwm1: <input type="number" name="pwm1"  min="0" max="32000" onChange="DoCommand('pwm1', this.value)" value="111"/> </td>
 	 <td> pwm2: <input type="number" name="pwm2"  min="0" max="32000" onChange="DoCommand('pwm2', this.value)" value="122"/> </td><tr>
 	 <td> pwm3: <input type="number" name="pwm3"  min="0" max="32000" onChange="DoCommand('pwm3', this.value)" value="103"/></td>
@@ -412,7 +454,7 @@ function AJAXSubmit (oFormElement) {
 	   
 	  
 	 </tr>
-    </tr>
+
      <!-- <input type="submit" value="Submit" /> -->
    
   
@@ -426,5 +468,14 @@ Last Name: <input id="last_name" name="last_name" type="text" value="brinza"> <b
 <input name="myBtn" type="submit" value="Submit Data" onclick="ajax_post();"> <br><br>
 <div id="status"></div>
 -->
+
+<td>
+<h3>Using the GET method to Arduino</h3>
+ <br />Page created by Alecu <a href="https://github.com/gitalecu"> https://github.com/gitalecu </a>
+ </tr>
+</td>
+
+
 </body>
+
 </html>
