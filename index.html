@@ -1,16 +1,66 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Arduino Two Temperatures</title>
-        <script>
-        var data_val = 0;
-        var data_val2 = 0;
-<!-- Gauge Code Starts -->
-var Gauge=function(b){function l(a,b){for(var c in b)"object"==typeof b[c]&&"[object Array]"!==Object.prototype.toString.call(b[c])&&"renderTo"!=c?("object"!=typeof a[c]&&(a[c]={}),l(a[c],b[c])):a[c]=b[c]}function q(){z.width=b.width;z.height=b.height;A=z.cloneNode(!0);B=A.getContext("2d");C=z.width;D=z.height;t=C/2;u=D/2;f=t<u?t:u;A.i8d=!1;B.translate(t,u);B.save();a.translate(t,u);a.save()}function v(a){var b=new Date;G=setInterval(function(){var c=(new Date-b)/a.duration;1<c&&(c=1);var f=("function"==
-typeof a.delta?a.delta:M[a.delta])(c);a.step(f);1==c&&clearInterval(G)},a.delay||10)}function k(){G&&clearInterval(G);var a=I-n,h=n,c=b.animation;v({delay:c.delay,duration:c.duration,delta:c.fn,step:function(b){n=parseFloat(h)+a*b;E.draw()}})}function e(a){return a*Math.PI/180}function g(b,h,c){c=a.createLinearGradient(0,0,0,c);c.addColorStop(0,b);c.addColorStop(1,h);return c}function p(){var m=93*(f/100),h=f-m,c=91*(f/100),e=88*(f/100),d=85*(f/100);a.save();b.glow&&(a.shadowBlur=h,a.shadowColor=
-"rgba(0, 0, 0, 0.5)");a.beginPath();a.arc(0,0,m,0,2*Math.PI,!0);a.fillStyle=g("#ddd","#aaa",m);a.fill();a.restore();a.beginPath();a.arc(0,0,c,0,2*Math.PI,!0);a.fillStyle=g("#fafafa","#ccc",c);a.fill();a.beginPath();a.arc(0,0,e,0,2*Math.PI,!0);a.fillStyle=g("#eee","#f0f0f0",e);a.fill();a.beginPath();a.arc(0,0,d,0,2*Math.PI,!0);a.fillStyle=b.colors.plate;a.fill();a.save()}function w(a){var h=!1;a=0===b.majorTicksFormat.dec?Math.round(a).toString():a.toFixed(b.majorTicksFormat.dec);return 1<b.majorTicksFormat["int"]?
-(h=-1<a.indexOf("."),-1<a.indexOf("-")?"-"+(b.majorTicksFormat["int"]+b.majorTicksFormat.dec+2+(h?1:0)-a.length)+a.replace("-",""):""+(b.majorTicksFormat["int"]+b.majorTicksFormat.dec+1+(h?1:0)-a.length)+a):a}function d(){var m=81*(f/100);a.lineWidth=2;a.strokeStyle=b.colors.majorTicks;a.save();if(0===b.majorTicks.length){for(var h=(b.maxValue-b.minValue)/5,c=0;5>c;c++)b.majorTicks.push(w(b.minValue+h*c));b.majorTicks.push(w(b.maxValue))}for(c=0;c<b.majorTicks.length;++c)a.rotate(e(45+c*(270/(b.majorTicks.length-
-1)))),a.beginPath(),a.moveTo(0,m),a.lineTo(0,m-15*(f/100)),a.stroke(),a.restore(),a.save();b.strokeTicks&&(a.rotate(e(90)),a.beginPath(),a.arc(0,0,m,e(45),e(315),!1),a.stroke(),a.restore(),a.save())}function J(){var m=81*(f/100);a.lineWidth=1;a.strokeStyle=b.colors.minorTicks;a.save();for(var h=b.minorTicks*(b.majorTicks.length-1),c=0;c<h;++c)a.rotate(e(45+c*(270/h))),a.beginPath(),a.moveTo(0,m),a.lineTo(0,m-7.5*(f/100)),a.stroke(),a.restore(),a.save()}function s(){for(var m=55*(f/100),h=0;h<b.majorTicks.length;++h){var c=
+<html><head>
+  <title>www.TheBreadBoard.ca - Arduino Fast Track - Lesson 4</title>
+  <script type="text/javascript">
+      // Use ip address when reading from hard drive
+      //var myIPaddress = "http://10.0.0.18/";
+      // Use "/" string when using from controller web site
+      var myIPaddress = "http://10.0.0.19/";
+	  // var myIPaddress = "http://10.0.0.14/php/get_back.php?";
+      var analogAlljson = "analogAlljson";
+      var digitalAlljson = "digitalAlljson";
+
+      var analog0 = 0;
+      var analog1 = 0;
+      var analog2 = 0;
+      var analog3 = 0;
+	  var analog4 = 0;
+	  var analog5 = 0;
+	  var data_val = 0;
+      var data_val2 = 0;
+      var digital1 = 0;
+	  var digital2 = 0;
+	  var digital3 = 0;
+	  var digital4 = 0;
+	  var pwm0 = 0;
+	  var pwm1 = 0;
+	  var pwm2 = 0;
+		
+
+      var Gauge = function (b) {
+          function l(a, b) { for (var c in b) "object" == typeof b[c] && "[object Array]" !== Object.prototype.toString.call(b[c]) && "renderTo" != c ? ("object" != typeof a[c] && (a[c] = {}), l(a[c], b[c])) : a[c] = b[c] } function q() { z.width = b.width; z.height = b.height; A = z.cloneNode(!0); B = A.getContext("2d"); C = z.width; D = z.height; t = C / 2; u = D / 2; f = t < u ? t : u; A.i8d = !1; B.translate(t, u); B.save(); a.translate(t, u); a.save() } function v(a) {
+              var b = new Date; G = setInterval(function () {
+                  var c = (new Date - b) / a.duration; 1 < c && (c = 1); var f = ("function" ==typeof a.delta?a.delta:M[a.delta])(c);
+a.step(f);1==c&&clearInterval(G)},a.delay||10)}function k(){G&&clearInterval(G);
+var a=I-n,h=n,c=b.animation;
+v({delay:c.delay,duration:c.duration,delta:c.fn,step:function(b){n=parseFloat(h)+a*b;E.draw()}})}function e(a){return a*Math.PI/180}function g(b,h,c){c=a.createLinearGradient(0,0,0,c);
+c.addColorStop(0,b);
+c.addColorStop(1,h);
+return c}
+function p(){var m=93*(f/100),h=f-m,c=91*(f/100),e=88*(f/100),d=85*(f/100);
+a.save();b.glow&&(a.shadowBlur=h,a.shadowColor="rgba(0, 0, 0, 0.5)");a.beginPath();
+a.arc(0,0,m,0,2*Math.PI,!0);
+a.fillStyle=g("#ddd","#aaa",m);
+a.fill();
+a.restore();
+a.beginPath();
+a.arc(0,0,c,0,2*Math.PI,!0);
+a.fillStyle=g("#fafafa","#ccc",c);
+a.fill();a.beginPath();
+a.arc(0,0,e,0,2*Math.PI,!0);
+a.fillStyle=g("#eee","#f0f0f0",e);
+a.fill();a.beginPath();
+a.arc(0,0,d,0,2*Math.PI,!0);
+a.fillStyle=b.colors.plate;a.fill();
+a.save()}function w(a){var h=!1;a=0===b.majorTicksFormat.dec?Math.round(a).toString():a.toFixed(b.majorTicksFormat.dec);
+return 1<b.majorTicksFormat["int"]?(h=-1<a.indexOf("."),-1<a.indexOf("-")?"-"+(b.majorTicksFormat["int"]+b.majorTicksFormat.dec+2+(h?1:0)-a.length)+a.replace("-",""):""+(b.majorTicksFormat["int"]+b.majorTicksFormat.dec+1+(h?1:0)-a.length)+a):a}function d(){var m=81*(f/100);
+a.lineWidth=2;a.strokeStyle=b.colors.majorTicks;
+a.save();
+if(0===b.majorTicks.length){for(var h=(b.maxValue-b.minValue)/5,c=0;5>c;c++)b.majorTicks.push(w(b.minValue+h*c));b.majorTicks.push(w(b.maxValue))}for(c=0;c<b.majorTicks.length;++c)a.rotate(e(45+c*(270/(b.majorTicks.length-
+1)))),a.beginPath(),a.moveTo(0,m),a.lineTo(0,m-15*(f/100)),a.stroke(),a.restore(),a.save();b.strokeTicks&&(a.rotate(e(90)),a.beginPath(),a.arc(0,0,m,e(45),e(315),!1),a.stroke(),a.restore(),a.save())}function J(){var m=81*(f/100);
+a.lineWidth=1;
+a.strokeStyle=b.colors.minorTicks;
+a.save();for(var h=b.minorTicks*(b.majorTicks.length-1),c=0;c<h;++c)a.rotate(e(45+c*(270/h))),a.beginPath(),a.moveTo(0,m),a.lineTo(0,m-7.5*(f/100)),a.stroke(),a.restore(),a.save()}function s(){for(var m=55*(f/100),h=0;h<b.majorTicks.length;++h){var c=
 F(m,e(45+h*(270/(b.majorTicks.length-1))));a.font=20*(f/200)+"px Arial";a.fillStyle=b.colors.numbers;a.lineWidth=0;a.textAlign="center";a.fillText(b.majorTicks[h],c.x,c.y+3)}}function x(a){var h=b.valueFormat.dec,c=b.valueFormat["int"];a=parseFloat(a);var f=0>a;a=Math.abs(a);if(0<h){a=a.toFixed(h).toString().split(".");h=0;for(c-=a[0].length;h<c;++h)a[0]="0"+a[0];a=(f?"-":"")+a[0]+"."+a[1]}else{a=Math.round(a).toString();h=0;for(c-=a.length;h<c;++h)a="0"+a;a=(f?"-":"")+a}return a}function F(a,b){var c=
 Math.sin(b),f=Math.cos(b);return{x:0*f-a*c,y:0*c+a*f}}function N(){a.save();for(var m=81*(f/100),h=m-15*(f/100),c=0,g=b.highlights.length;c<g;c++){var d=b.highlights[c],r=(b.maxValue-b.minValue)/270,k=e(45+(d.from-b.minValue)/r),r=e(45+(d.to-b.minValue)/r);a.beginPath();a.rotate(e(90));a.arc(0,0,m,k,r,!1);a.restore();a.save();var l=F(h,k),p=F(m,k);a.moveTo(l.x,l.y);a.lineTo(p.x,p.y);var p=F(m,r),n=F(h,r);a.lineTo(p.x,p.y);a.lineTo(n.x,n.y);a.lineTo(l.x,l.y);a.closePath();a.fillStyle=d.color;a.fill();
 a.beginPath();a.rotate(e(90));a.arc(0,0,h,k-0.2,r+0.2,!1);a.restore();a.closePath();a.fillStyle=b.colors.plate;a.fill();a.save()}}function K(){var m=12*(f/100),h=8*(f/100),c=77*(f/100),d=20*(f/100),k=4*(f/100),r=2*(f/100),l=function(){a.shadowOffsetX=2;a.shadowOffsetY=2;a.shadowBlur=10;a.shadowColor="rgba(188, 143, 143, 0.45)"};l();a.save();n=0>n?Math.abs(b.minValue-n):0<b.minValue?n-b.minValue:Math.abs(b.minValue)+n;a.rotate(e(45+n/((b.maxValue-b.minValue)/270)));a.beginPath();a.moveTo(-r,-d);a.lineTo(-k,
@@ -26,12 +76,42 @@ a.fillStyle=b.colors.units,a.textAlign="center",a.fillText(b.units,0,f/3.25),a.r
 var e=b.createElement("div");e.style.fontFamily="Led";e.style.position="absolute";e.style.height=e.style.width=0;e.style.overflow="hidden";e.innerHTML=".";b.body.appendChild(e);setTimeout(function(){Gauge.initialized=!0;e.parentNode.removeChild(e)},250)}},1)})();Gauge.Collection=[];
 Gauge.Collection.get=function(b){if("string"==typeof b)for(var l=0,q=this.length;l<q;l++){if((this[l].config.renderTo.tagName?this[l].config.renderTo:document.getElementById(this[l].config.renderTo)).getAttribute("id")==b)return this[l]}else return"number"==typeof b?this[b]:null};function domReady(b){window.addEventListener?window.addEventListener("DOMContentLoaded",b,!1):window.attachEvent("onload",b)}
 domReady(function(){function b(b){for(var e=b[0],d=1,g=b.length;d<g;d++)e+=b[d].substr(0,1).toUpperCase()+b[d].substr(1,b[d].length-1);return e}for(var l=document.getElementsByTagName("canvas"),q=0,v=l.length;q<v;q++)if("canv-gauge"==l[q].getAttribute("data-type")){var k=l[q],e={},g,p=parseInt(k.getAttribute("width"),10),w=parseInt(k.getAttribute("height"),10);e.renderTo=k;p&&(e.width=p);w&&(e.height=w);p=0;for(w=k.attributes.length;p<w;p++)if(g=k.attributes.item(p).nodeName,"data-type"!=g&&"data-"==
-g.substr(0,5)){var d=g.substr(5,g.length-5).toLowerCase().split("-");if(g=k.getAttribute(g))switch(d[0]){case "colors":d[1]&&(e.colors||(e.colors={}),"needle"==d[1]?(d=g.split(/\s+/),e.colors.needle=d[0]&&d[1]?{start:d[0],end:d[1]}:g):(d.shift(),e.colors[b(d)]=g));break;case "highlights":e.highlights||(e.highlights=[]);g=g.match(/(?:(?:-?\d*\.)?(-?\d+){1,2} ){2}(?:(?:#|0x)?(?:[0-9A-F|a-f]){3,8}|rgba?\(.*?\))/g);for(var d=0,J=g.length;d<J;d++){var s=g[d].replace(/^\s+|\s+$/g,"").split(/\s+/),x={};
-s[0]&&""!=s[0]&&(x.from=s[0]);s[1]&&""!=s[1]&&(x.to=s[1]);s[2]&&""!=s[2]&&(x.color=s[2]);e.highlights.push(x)}break;case "animation":d[1]&&(e.animation||(e.animation={}),"fn"==d[1]&&/^\s*function\s*\(/.test(g)&&(g=eval("("+g+")")),e.animation[d[1]]=g);break;default:d=b(d);if("onready"==d)continue;if("majorTicks"==d)g=g.split(/\s+/);else if("strokeTicks"==d||"glow"==d)g="true"==g?!0:!1;else if("valueFormat"==d)if(g=g.split("."),2==g.length)g={"int":parseInt(g[0],10),dec:parseInt(g[1],10)};else continue;
-e[d]=g}}e=new Gauge(e);k.getAttribute("data-value")&&e.setRawValue(parseFloat(k.getAttribute("data-value")));k.getAttribute("data-onready")&&(e.onready=function(){eval(this.config.renderTo.getAttribute("data-onready"))});e.draw()}});window.Gauge=Gauge;
-<!-- Gauge Code Ends -->
-        
-        function GetArduinoInputs()
+g.substr(0,5)){var d=g.substr(5,g.length-5).toLowerCase().split("-");if(g=k.getAttribute(g))switch(d[0]){case "colors":d[1]&&(e.colors||(e.colors={}),"needle"==d[1]?(d=g.split(/\s+/),e.colors.needle=d[0]&&d[1]?{start:d[0],end:d[1]}:g):(d.shift(),e.colors[b(d)]=g));break;case "highlights":e.highlights||(e.highlights=[]);g=g.split(",");for(var d=0,J=g.length;d<J;d++){var s=g[d].replace(/^\s+|\s+$/g,"").split(/\s+/),x={};s[0]&&""!=s[0]&&(x.from=s[0]);s[1]&&""!=s[1]&&(x.to=s[1]);s[2]&&""!=s[2]&&(x.color=
+s[2]);e.highlights.push(x)}break;case "animation":d[1]&&(e.animation||(e.animation={}),"fn"==d[1]&&/^\s*function\s*\(/.test(g)&&(g=eval("("+g+")")),e.animation[d[1]]=g);break;default:d=b(d);if("onready"==d)continue;if("majorTicks"==d)g=g.split(/\s+/);else if("strokeTicks"==d||"glow"==d)g="true"==g?!0:!1;else if("valueFormat"==d)if(g=g.split("."),2==g.length)g={"int":parseInt(g[0],10),dec:parseInt(g[1],10)};else continue;e[d]=g}}e=new Gauge(e);k.getAttribute("data-value")&&e.setRawValue(parseFloat(k.getAttribute("data-value")));
+k.getAttribute("data-onready")&&(e.onready=function(){eval(this.config.renderTo.getAttribute("data-onready"))});e.draw()}});window.Gauge=Gauge;
+
+
+function ajax_post(){
+    // Create our XMLHttpRequest object
+    var hr = new XMLHttpRequest();
+    // Create some variables we need to send to our PHP file
+    var url = "/php/review_data1.php";
+				//var fn = document.getElementById("first_name").value;
+				//var ln = document.getElementById("last_name").value;
+				//var vars = "firstname="+fn+"&lastname="+ln;
+    hr.open("POST", url, true);
+    // Set content type header information for sending url encoded variables in the request
+    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // Access the onreadystatechange event for the XMLHttpRequest object
+    hr.onreadystatechange = function() {
+	    if(hr.readyState == 4 && hr.status == 200) {
+		    var return_data = hr.responseText;
+			//alert("GET data : " + hr.responseText);
+			
+			document.getElementById("myVal").innerHTML = return_data;
+			//digital0 = this.responseXML.getElementsByTagName('analog')[6].childNodes[0].nodeValue;
+			//document.getElementById("digital0").innerHTML = digital0;
+			           
+	    }
+    }
+    // Send the data to PHP now... and wait for response to update the status div
+    hr.send(); // hr.send(vars);  Actually execute the request
+	//alert("SEND vars : " + vars);
+    document.getElementById("myVal").innerHTML = "processing MySQL DB...";
+	
+}
+
+function updateSlider(pwmChannel, pwmvalue) 
         {
             nocache = "&nocache=" + Math.random() * 1000000;
             var request = new XMLHttpRequest();
@@ -40,24 +120,311 @@ e[d]=g}}e=new Gauge(e);k.getAttribute("data-value")&&e.setRawValue(parseFloat(k.
                 if (this.readyState == 4) {
                     if (this.status == 200) {
                         if (this.responseXML != null) {
-                            data_val  = this.responseXML.getElementsByTagName('analog')[0].childNodes[0].nodeValue;
-                            data_val2 = this.responseXML.getElementsByTagName('analog')[1].childNodes[0].nodeValue;
-                            data_val  = ((data_val * 5.0 / 1024.0) - 0.5) / 0.01;
-                            data_val2 = ((data_val2 * 5.0 / 1024.0) - 0.5) / 0.01;
+						    //alert("GET data : " + request.responseText);
+        
                         }
                     }
                 }
             }
-            request.open("GET", "ajax_inputs" + nocache, true);
+			request.open("GET", myIPaddress + "ajax_inputs&" + pwmChannel + "=" + pwmvalue + nocache, true);
+			//alert("SEND: " + myIPaddress + "ajax_inputs&" + pwmChannel + "=" + pwmvalue + nocache );
+            request.send(null);			 
+            document.getElementById(pwmChannel).innerHTML = pwmvalue;
+						            
+        }
+	
+
+function DoCommand(targetElement, command) {
+    nocache = "&nocache=" + Math.random() * 1000000;
+    var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+            {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        if (this.responseXML != null) {
+						    alert("GET data : " + request.responseText);
+        
+                        }
+                    }
+                }
+            }
+    request.open("GET", myIPaddress + "ajax_inputs&" + targetElement + "=" + command + nocache, true);
+	//alert("SEND DoCommand : " + myIPaddress + "ajax_inputs&" + targetElement+ "=" + command + nocache);
+    request.send();
+}
+
+function GetArduinoInputs()
+        {
+            nocache = "&nocache=" + Math.random() * 1000000;
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function()
+            {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        if (this.responseXML != null) {
+						    //alert("GET data : " + request.responseText);
+                            analog0 = this.responseXML.getElementsByTagName('analog')[0].childNodes[0].nodeValue;
+                            analog1 = this.responseXML.getElementsByTagName('analog')[1].childNodes[0].nodeValue;
+							analog2 = this.responseXML.getElementsByTagName('analog')[2].childNodes[0].nodeValue;
+                            analog3 = this.responseXML.getElementsByTagName('analog')[3].childNodes[0].nodeValue;
+							analog4 = this.responseXML.getElementsByTagName('analog')[4].childNodes[0].nodeValue;
+                            analog5 = this.responseXML.getElementsByTagName('analog')[5].childNodes[0].nodeValue;
+							digital0 = this.responseXML.getElementsByTagName('analog')[6].childNodes[0].nodeValue;
+                            digital1 = this.responseXML.getElementsByTagName('analog')[7].childNodes[0].nodeValue;
+							digital2 = this.responseXML.getElementsByTagName('analog')[8].childNodes[0].nodeValue;
+                            digital3 = this.responseXML.getElementsByTagName('analog')[9].childNodes[0].nodeValue;
+							digital4 = this.responseXML.getElementsByTagName('analog')[10].childNodes[0].nodeValue;
+                            pwm0 = this.responseXML.getElementsByTagName('analog')[11].childNodes[0].nodeValue;
+                            pwm1 = this.responseXML.getElementsByTagName('analog')[12].childNodes[0].nodeValue;
+							pwm2 = this.responseXML.getElementsByTagName('analog')[13].childNodes[0].nodeValue;	
+														
+							document.getElementById("digital0").innerHTML = digital0;
+							document.getElementById("digital1").innerHTML = digital1;
+							document.getElementById("digital2").innerHTML = digital2;
+							document.getElementById("digital3").innerHTML = digital3;
+							document.getElementById("digital4").innerHTML = digital4;
+							document.getElementById("pwm0val").innerHTML = pwm0;
+							//document.getElementById("pwm1val").innerHTML = pwm1;
+							document.getElementById("pwm2val").innerHTML = pwm2;
+							
+							//alert("GET values: " + "data_val=" + data_val + " data_val2=" + data_val2);
+                            data_val  = ((data_val * 5.0 / 1024.0) - 0.5) / 0.01;
+                            data_val4 = ((data_val2 * 5.0 / 1024.0) - 0.5) / 0.01;
+							analog2 = Math.random() * 1024;
+							analog3 = Math.random() * 1024;
+							analog4 = Math.random() * 150;
+							ajax_post();
+                        }
+                    }
+                }
+            }
+            //request.open("GET", myIPaddress + "ajax_inputs" + nocache, true);
+			request.open("GET", myIPaddress + "ajax_inputs&" + nocache, true);
+			
+			//request.setRequestHeader('Access-Control-Allow-Origin', '*');
+			//request.setRequestHeader("Referer", "http://10.0.0.16");
+			//request.setRequestHeader("Origin", "http://10.0.0.16");
+			//alert("SEND: " + myIPaddress + "ajax_inputs" + nocache );
             request.send(null);
-            setTimeout('GetArduinoInputs()', 200);
+			
+			setTimeout('GetArduinoInputs()', 5000);
+			//setTimeout('ajax_post();', 5000);
             
         }
-    </script>
-    </head>
-    <body onload="GetArduinoInputs()">
-        <h1>Arduino Two Temperatures</h1>
-        <canvas id="an_gauge_1" data-title="Inside" data-units="Temp. &deg;C" width="500" height="500" data-major-ticks="-40 -30 -20 -10 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150" data-type="canv-gauge" data-min-value="-40" data-max-value="150" data-highlights="-40 0 #4D89F2, 0 10 #25B8D9, 10 30 #0BB950, 30 40 #cc5, 40 150 #f33" data-onready="setInterval( function() { Gauge.Collection.get('an_gauge_1').setValue(data_val);}, 200);"></canvas>
-        <canvas id="an_gauge_2" data-title="Outside" data-units="Temp. &deg;C" width="500" height="500" data-major-ticks="-40 -30 -20 -10 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150" data-type="canv-gauge" data-min-value="-40" data-max-value="150" data-highlights="-40 0 #4D89F2, 0 10 #25B8D9, 10 30 #0BB950, 30 40 #cc5, 40 150 #f33" data-onready="setInterval( function() { Gauge.Collection.get('an_gauge_2').setValue(data_val2);}, 200);"></canvas>
-    </body>
+
+</script>
+<style type="text/css">
+    .centerText{
+   text-align: center;
+}
+    .divBorder {
+    border: 2px solid;
+    border-radius: 15px;
+    width: 810px;
+    text-align: center;
+    box-shadow: 6px 6px 3px #888888
+}
+    .myRange {
+    border: 2px solid;
+    height: 10px;
+    display: block;
+    margin: 20px;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #444;
+    box-shadow: 6px 6px 3px #888888
+}
+
+</style>
+</head><body onLoad="GetArduinoInputs()">
+<div class="divBorder"><h2>Arduino Fast Track - Lesson 4</h2><h2>Control over Ethernet using the Wiznet and ENC26 modules</h2></div>
+    <br />
+        <div class="divBorder"><table width="800">
+        <tr><th>A0</th><th>A1</th><th>A2</th><th>A3</th></tr>
+        <tr>
+            <td><canvas id="Canvas0"></canvas></td>
+            <td><canvas id="Canvas1"></canvas></td>
+			 <td><canvas id="Canvas2"></canvas></td>
+            <td><canvas id="an_gauge_4" data-title="Outside" data-units="Temp4. &deg;C" width="200" height="200" data-major-ticks="-40 -30 -20 -10 0 10 20 30 40 50 60 70 80 90 100 110 120 130 140 150" data-type="canv-gauge" data-min-value="-40" data-max-value="150" data-highlights="-40 0 #4D89F2, 0 10 #25B8D9, 10 30 #0BB950, 30 40 #cc5, 40 150 #f33" data-onready="setInterval( function() { Gauge.Collection.get('an_gauge_4').setValue(analog4);}, 200);"></canvas></td>
+                
+	   </tr>
+	   <tr>
+	         <td><canvas id="Canvas3"></canvas></td>
+	   </tr>
+    </table></div>
+    <br />
+    <div class="divBorder"><table  width="400" align="center"><tr>
+            <!-- <td><input type="button" onClick="DoCommand('myVal', 'getmS')" value="Get milliseconds" /></td> -->
+			<td><input type="button" onClick="ajax_post();" value="Update from MySQL" /></td>
+            
+		   <td><div id="myVal">?????????</div></td>
+        </tr></table></div>
+    <br />
+    <div class="divBorder"><table  width="800"><tr>
+            <td class="centerText"></td>
+            <td class="centerText"><input id="Button8" type="button" onClick="DoCommand('digital0', '0')" value="Out0OFF" title="Click to invert output" />
+			                       <input id="Button81" type="button" onClick="DoCommand('digital0', '1')" value="Out0ON" title="Click to invert output" /></td>
+            <td class="centerText"><input id="Button9" type="button" onClick="DoCommand('digital1', '0')" value="Out1OFF" title="Click to invert output" />
+			                       <input id="Button91" type="button" onClick="DoCommand('digital1', '1')" value="Out1ON" title="Click to invert output"  /></td>
+            <td class="centerText"><input id="Button10" type="button" onClick="DoCommand('digital2', '0')" value="Out2OFF" title="Click to invert output"  />
+								   <input id="Button101" type="button" onClick="DoCommand('digital2', '1')" value="Out2ON" title="Click to invert output"  /></td>
+            <td class="centerText"><input id="Button11" type="button" onClick="DoCommand('digital3', '3')" value="In0" title="Click to toggle on/off pullup resistors" /></td>
+            <td class="centerText"><input id="Button12" type="button" onClick="DoCommand('digital4', '4')" value="In1" title="Click to toggle on/off pullup resistors" /></td>
+        </tr><tr>
+            <td class="centerText"><input id="Button7" type="button" onClick="GetArduinoInputs()" value="Get Values" title="click to retreive digital input and output values"/></td>
+            <td class="centerText"><div id="digital0">?</div></td>
+            <td class="centerText"><div id="digital1">?</div></td>
+            <td class="centerText"><div id="digital2">?</div></td>
+            <td class="centerText"><div id="digital3">?</div></td>
+            <td class="centerText"><div id="digital4">?</div></td>
+        </tr></table></div>
+    <br />
+       <div class="divBorder"><table width="800"><tr>
+            <td class="centerText">0</td><td class="centerText">PWM outputs</td><td class="centerText">1</td>
+        </tr><tr>
+            <td class="centerText"><div id="Div1"><input id="Range1" class="myRange" type="range" min="0" max="255" step="5" value="128" onChange="updateSlider('pwm0', this.value)" title="Slide to change PWM0 output"/><output id="pwm0">???</output></div><div id="pwm0val">???</div></td>
+           
+			<td width="300"></td>
+			<td class="centerText"><div id="Div3"><input id="Range3" class="myRange" type="range" min="0" max="255" step="5" value="128" onChange="updateSlider('pwm2', this.value)" title="Slide to change PWM2 output"/><output id="pwm2">???</output></div><div id="pwm2val">???</div></td>
+            
+	   </tr></table></div> 
+    <script>
+        var gauge0 = new Gauge({
+            renderTo: 'Canvas0',
+            width: 200, height: 200,
+            maxValue: 1023,
+            valueFormat: { int: 4, dec: 0 },
+            glow: true,
+            units: 'Count', title: 'Analog 0',
+            majorTicks: ['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
+            strokeTicks: true,
+            highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+            animation: {delay: 10, duration: 300,fn: 'bounce' }
+        });
+        gauge0.onready = function () { setInterval(function () { gauge0.setValue(analog0); }, 200); };
+        gauge0.draw();
+
+        var gauge1 = new Gauge({
+            renderTo: 'Canvas1',
+            width: 200, height: 200,
+            maxValue: 1023,
+            units: 'Count', title: 'Analog 1',
+            valueFormat: { int: 4, dec: 0 },
+            glow: true,
+            majorTicks: ['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
+            strokeTicks: true,
+            highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+            animation: {delay: 10,duration: 300,fn: 'bounce'}});
+        gauge1.onready = function () {setInterval(function () {gauge1.setValue(analog1);}, 200);};
+        gauge1.draw();
+
+        var gauge2 = new Gauge({
+            renderTo: 'Canvas2',
+            width: 200,height: 200,
+            maxValue: 1023,
+            units: 'Count',title: 'Analog 2',
+            valueFormat: { int: 4, dec: 0 },
+            glow: true,
+            majorTicks: ['0', '127', '255', '383', '511', '639', '767', '895', '1023'],
+            strokeTicks: true,
+            highlights: [{from: 00,to: 255,color: 'PaleGreen'}, {from: 256,to: 767,color: 'Khaki'}, {from: 768,to: 1023,color: 'LightSalmon'}],
+            animation: {delay: 10,duration: 300,fn: 'bounce'}});
+        gauge2.onready = function () {setInterval(function () {gauge2.setValue(analog2);}, 200);};
+        gauge2.draw();
+
+        var gauge3 = new Gauge({
+            renderTo: 'Canvas3',
+            width: 200, height: 200,
+            maxValue: 1024,
+            units: 'Volts', title: 'Analog 4',
+            valueFormat: { int: 4, dec: 0 },
+            glow: true,
+            majorTicks: ['0', '0.5', '1.0', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0', '4.5', '5.0'],
+            highlights: false,
+            glow: false,
+            colors: {needle:{ start:'lightgreen',end:'navy'},plate:'lightyellow',title:'green',units:'lightgreen',majorTicks:'darkgreen',minorTicks:'lightgreen',numbers:'darkgreen'},
+            animation: { delay: 10,duration: 300,fn: 'elastic'}});
+        gauge3.onready = function () {setInterval(function () {gauge3.setValue(analog3);}, 200);};
+        gauge3.draw();
+
+</script>
+    <br />Page created by Alecu <a href="https://github.com/gitalecu"> https://github.com/gitalecu </a>
+   
+</body></html>
+
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Sending forms with FormData &ndash; MDN</title>
+<script type="text/javascript">
+//"use strict";
+
+function ajaxSuccess () {
+  alert(" GET BACK:" + this.responseText);
+}
+
+function AJAXSubmit (oFormElement) {
+ nocache = "&nocache=" + Math.random() * 1000000;
+  if (!oFormElement.action) { return; }
+  var oReq = new XMLHttpRequest();
+  oReq.onload = ajaxSuccess;
+  if (oFormElement.method.toLowerCase() === "post") {
+    oReq.open("post", oFormElement.action, true);
+    oReq.send(new FormData(oFormElement));
+  } else {
+    var oField, sFieldType, nFile, sSearch = "";
+    for (var nItem = 0; nItem < oFormElement.elements.length; nItem++) {
+      oField = oFormElement.elements[nItem];
+      if (!oField.hasAttribute("name")) { continue; }
+      sFieldType = oField.nodeName.toUpperCase() === "INPUT" ? oField.getAttribute("type").toUpperCase() : "TEXT";
+      if (sFieldType === "FILE") {
+        for (nFile = 0; nFile < oField.files.length; sSearch += "&" + escape(oField.name) + "=" + escape(oField.files[nFile++].name));
+      } else if ((sFieldType !== "RADIO" && sFieldType !== "CHECKBOX") || oField.checked) {
+        sSearch += "&" + escape(oField.name) + "=" + escape(oField.value);
+      }
+    }
+	
+    oReq.open("get", oFormElement.action.replace(/(?:\?.*)?$/, sSearch.replace(/^&/, "?")) + nocache, true);
+	
+   alert(" SEND:" + oFormElement.action.replace(/(?:\?.*)?$/, sSearch.replace(/^&/, "?")) + nocache);
+   oReq.send(null);
+  }
+}
+</script>
+</head>
+<body>
+
+<h1>Sending forms with FormData</h1>
+
+<h2>Using the GET method to Arduino</h2>
+<div class="divBorder"><table width="800"><tr>       
+<form action="http://10.0.0.19/" method="get" onsubmit="AJAXSubmit(this); return false;">
+   
+	             <input type="hidden" name="ajax_inputs" value="1"/> 
+     <td> pwm0: <input type="number" name="pwm0" min="0" max="32000" onChange="DoCommand('pwm0', this.value)" value="100"/></td>
+	 <td> pwm1: <input type="number" name="pwm1"  min="0" max="32000" onChange="DoCommand('pwm1', this.value)" value="111"/> </td>
+	 <td> pwm2: <input type="number" name="pwm2"  min="0" max="32000" onChange="DoCommand('pwm2', this.value)" value="122"/> </td><tr>
+	 <td> pwm3: <input type="number" name="pwm3"  min="0" max="32000" onChange="DoCommand('pwm3', this.value)" value="103"/></td>
+	 <td> pwm4: <input type="number" name="pwm4"  min="0" max="32000" onChange="DoCommand('pwm4', this.value)" value="114"/> </td>
+	 <td> pwm5: <input type="number" name="pwm5"  min="0" max="32000" onChange="DoCommand('pwm5', this.value)" value="125"/> </td>
+	   
+	  
+	 </tr>
+    </tr>
+     <!-- <input type="submit" value="Submit" /> -->
+   
+  
+</form>
+ </tr>
+ </div>
+ <!-- 
+<h2>Ajax Post to PHP and Get Return Data</h2>
+First Name: <input id="first_name" name="first_name" type="text" value="vasea">  <br><br>
+Last Name: <input id="last_name" name="last_name" type="text" value="brinza"> <br><br>
+<input name="myBtn" type="submit" value="Submit Data" onclick="ajax_post();"> <br><br>
+<div id="status"></div>
+-->
+</body>
 </html>
