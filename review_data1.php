@@ -4,6 +4,7 @@
 	// Start MySQL Connection
 	
 	// http://ardu.mooo.com/php/review_data1.php
+	header("Access-Control-Allow-Origin: *");
 	include('dbconnect.php'); 
 
 	// Retrieve all records and display them
@@ -26,6 +27,8 @@
 		
 		$oddrow = !$oddrow;
 		if ($row["id"] == '1') {
+		// XML 
+		/* echo '<?xml version = "1.0" ?>';
 		echo '<inputs>';
 		echo '<analog>'.$row["analog1"].'</analog>';
 		echo '<analog>'.$row["analog2"].'</analog>';
@@ -42,7 +45,26 @@
 		echo '<analog>'.$row["pwm1"].'</analog>';
 		echo '<analog>'.$row["pwm2"].'</analog>';
 		echo '</inputs>';
-		
+		*/
+		// http://www.w3schools.com/json/json_example.asp  
+		$outp = "[";
+		$outp .= '{"analog1":"'  . $row["analog1"] . '",';
+		$outp .= '"analog2":"'   . $row["analog2"] . '",';
+		$outp .= '"analog3":"'   . $row["analog3"] . '",';
+		$outp .= '"analog4":"'   . $row["analog4"] . '",';
+		$outp .= '"analog5":"'   . $row["analog5"] . '",';
+		$outp .= '"analog6":"'   . $row["analog6"] . '"},'; 
+		$outp .= '{"digital0":"'  . $row["digital0"] . '",';
+		$outp .= '"digital1":"'   . $row["digital1"] . '",';
+		$outp .= '"digital2":"'   . $row["digital2"] . '",';
+		$outp .= '"digital3":"'   . $row["digital3"] . '",';
+		$outp .= '"digital4":"'   . $row["digital4"] . '"},';
+        $outp .= '{"pwm0":"'  . $row["pwm0"] . '",';
+		$outp .= '"pwm1":"'   . $row["pwm1"] . '",';
+		$outp .= '"pwm2":"'   . $row["pwm2"] . '"}';		
+		$outp .="]";
+		echo($outp);
+
 		//echo '   <td'.$css_class.'>'.$row["id"].'</td>';
 		//echo '   <td'.$css_class.'>'.$row["event"].'</td>';
 		//echo '   <td'.$css_class.'>'.$row["valueset"].'</td>';
